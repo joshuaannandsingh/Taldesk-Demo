@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Taldesk-Demo/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/Taldesk-Demo/static/js/main.d817d1dd.chunk.js",
+    "main.js.map": "/Taldesk-Demo/static/js/main.d817d1dd.chunk.js.map",
+    "runtime-main.js": "/Taldesk-Demo/static/js/runtime-main.9c811a94.js",
+    "runtime-main.js.map": "/Taldesk-Demo/static/js/runtime-main.9c811a94.js.map",
+    "static/js/2.e323a576.chunk.js": "/Taldesk-Demo/static/js/2.e323a576.chunk.js",
+    "static/js/2.e323a576.chunk.js.map": "/Taldesk-Demo/static/js/2.e323a576.chunk.js.map",
+    "static/js/3.5a8e411c.chunk.js": "/Taldesk-Demo/static/js/3.5a8e411c.chunk.js",
+    "static/js/3.5a8e411c.chunk.js.map": "/Taldesk-Demo/static/js/3.5a8e411c.chunk.js.map",
+    "index.html": "/Taldesk-Demo/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/Taldesk-Demo/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.e323a576.chunk.js.LICENSE.txt": "/Taldesk-Demo/static/js/2.e323a576.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9c811a94.js",
+    "static/js/2.e323a576.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.d817d1dd.chunk.js"
+  ]
+}
