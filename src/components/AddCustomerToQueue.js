@@ -2,39 +2,75 @@ import { useState } from 'react'
 
 const AddCustomerToQueue = () => {
 
-    const[number, setNumber] = useState('')
+    const[number, setNumber] = useState('');
+    const[showForm,setShowForm] = useState(true);
+    
 
     const onSubmit = (e) => {
         e.preventDefault()
+    
+        
+/**************Format Contact Phone Number Input *********************/
+       
+        function formatPhoneNumber(phoneNumber) {
+                     
+            if(phoneNumber.length === 10){                                
+                return ("+1"+phoneNumber)
+            }
+            else if(phoneNumber.length === 11){         
+            return ("+"+phoneNumber)
+            }
+            else return null
+        }
+
+        var numberInput = formatPhoneNumber(number)
+        
+        if(numberInput == null){
+            alert('Please Enter a Valid Phone Number')
+            return
+        }
+       
+/************* Change Form State *****************************************/
+
+        setShowForm(false);
+        
+        
+
+
+/************** OBTAINING OAUTH TOKEN ***********************************/
+        const oauthAuth = "MGY0YmRiNWYxNTgyNDUyNmJmMjNkODZjMmQwYzlhYTc6amQ0c25LRU9xMmZ0WkNfaDdxWWthREtCYmo5SU93dEV4YVhLQ1RKWEt4RFczVi1lU0lMcVBEbm5Zb2hGbFIxVVZBQm1XS196NTNpeUZVNjdNc0RYemc="
+        const proxy = "https://rocky-peak-20701.herokuapp.com/"  //instance of cors-anywhere server I created with a default name
+
         var myHeaders = new Headers();
-        myHeaders.append("Access-Control-Allow-Origin","localhost:3000")
-        
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", "Basic MGY0YmRiNWYxNTgyNDUyNmJmMjNkODZjMmQwYzlhYTc6amQ0c25LRU9xMmZ0WkNfaDdxWWthREtCYmo5SU93dEV4YVhLQ1RKWEt4RFczVi1lU0lMcVBEbm5Zb2hGbFIxVVZBQm1XS196NTNpeUZVNjdNc0RYemc=");
-               
-        var raw = "";
+        myHeaders.append("Authorization", "Basic " + oauthAuth);
+          
         
+          
         var requestOptions = {
           method: 'POST',
           headers: myHeaders,
-          body: raw,
           redirect: 'follow'
         };
-        
-        fetch("https://demoeng.talkdeskid.com/oauth/token?grant_type=client_credentials&scope=callback:write", requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
+          
+        fetch(proxy + 'https://demoeng.talkdeskid.com/oauth/token?grant_type=client_credentials&scope=callback:write', requestOptions)
+          .then(response => response.json())
+          .then(result => req(result))
           .catch(error => console.log('error', error));
 
 
-            /*var myHeaders = new Headers();
+          
+/*************** USING OAUTH TOKEN TO MAKE CALL TO CALLBACK API **********/           
+          let req = (result) =>{
+            
+            var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
-            myHeaders.append("Authorization", "Bearer eyJraWQiOiIxYWI2YjBhNjAxNTY0MmY4YjA5MWM3MjE1MWIxMGQ5MCIsImFsZyI6IkVTMjU2In0.eyJpc3MiOiJodHRwczovL3d3dy50YWxrZGVza2lkLmNvbSIsImF1ZCI6Imh0dHBzOi8vYXBpLnRhbGtkZXNrYXBwLmNvbSIsImV4cCI6MTYzMTkxMDk1MiwibmJmIjoxNjMxOTEwMzUyLCJpYXQiOjE2MzE5MTAzNTIsImp0aSI6IjE2NWI5ZDNmZjlhMjQ1ZDc4ZmY4MjcxNmFmYjEwYTk0IiwiY2lkIjoiMGY0YmRiNWYxNTgyNDUyNmJmMjNkODZjMmQwYzlhYTciLCJndHkiOiJjbGllbnRfY3JlZGVudGlhbHMiLCJzY3AiOlsiY2FsbGJhY2s6d3JpdGUiXSwicmxtIjoiTUFJTiIsImFpZCI6IjU5NjUwOTUxMTU3OGU1MDAxNDEzMDkwMSIsImFjYyI6ImRlbW9lbmciLCJwc24iOiJDVVNUT01FUiIsInN1YiI6IjBmNGJkYjVmMTU4MjQ1MjZiZjIzZDg2YzJkMGM5YWE3In0.1ugt0VMxRShf0cJafaIUKlZWpXDmKqkWDLaxBVyH1ILgrG1jKzTZhoJ-sUdY29TJxyaQAP3a9TdJzxGVydWXoA");
-            myHeaders.append("Cookie", "rack.session=BAh7CEkiD3Nlc3Npb25faWQGOgZFVG86HVJhY2s6OlNlc3Npb246OlNlc3Npb25JZAY6D0BwdWJsaWNfaWRJIkU5YTJiZWIwMGE3ZjkzMTNlNjE2MjNiODJmYzhkMDAyOTZjODhjOGQxZGMwZmUxYmNhYjU2MzE1MmM1NmM4MGE1BjsARkkiCWNzcmYGOwBGSSIxL2YrbFRubUExSjk0MXIvaC8yVW9jcnNaMzJ5V0g3VzVMVDRhaHdnKy9wND0GOwBGSSINdHJhY2tpbmcGOwBGewZJIhRIVFRQX1VTRVJfQUdFTlQGOwBUSSItYjlkYTc4MzQ3YzA0NmY5YzBhOWIwMGE4MjQwMzYyMGEwNmE1YjAyOQY7AEY%3D--a7511146efbdaec45490a0ad6a13c97bd3ac4fe2");
+            myHeaders.append("Authorization", "Bearer " + result.access_token);
+            
 
             var raw = JSON.stringify({
             "talkdesk_phone_number": "+14155786136",
-            "contact_phone_number": "+18568409992"
+            "contact_phone_number": numberInput
             });
 
             var requestOptions = {
@@ -45,20 +81,34 @@ const AddCustomerToQueue = () => {
             };
     
 
-fetch("https://api.talkdeskapp.com/calls/callback", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));*/
-        }
+            fetch("https://api.talkdeskapp.com/calls/callback", requestOptions)
+              .then(response => response.text())
+              .catch(error => console.log('error', error));
+               }   
+    }
+
+
+
 return (
+    showForm?
     <form onSubmit={onSubmit}>
         <div>
-            <label>Phone Number</label>
-            <input type = 'text' placeholder='Add Phone Number' value ={number} onChange ={(e) => 
+            <label className = 'get-back'>We will get back to you as soon as we can!</label>
+        </div>
+        <div><label className = 'wait-time'>Estimated wait time: 30 minutes</label></div>
+        
+        <div className = 'form-control'>
+        <input type = 'number' placeholder='Phone Number'  value ={number} onChange ={(e) => 
             setNumber(e.target.value)} />
         </div>
-        <input type = 'submit' value ='Save Customer'  />
-    </form>
+        <input type = 'submit' value ='Join Queue'  className='submit-button'  />
+    </form> 
+    :<div>
+    <label className = 'get-back'>You have been entered into the queue</label>
+    <label className = 'get-back'>An agent will call you back as soon as possible</label>
+    <label className = 'wait-time'>Estimated wait time: 30 minutes</label>
+    </div>
+    
         )
  }
 
